@@ -29,6 +29,7 @@ export const logout = async (req, res) => {
    try{
     res.cookie("jwt","",{maxAge:0});
     res.status(200).json({message:"Logged out"})
+    console.log("Logged out")
    }
    catch(error){
     console.log("error in logout")
@@ -39,11 +40,10 @@ export const logout = async (req, res) => {
 export const signup = async (req, res) => {
     try {
         const { fullname, username, password, confirmpassword } = req.body;
-
         if (!fullname || !username || !password || !confirmpassword) {
             return res.status(400).json({ error: "All fields are required" });
         }
-
+        
         if (password !== confirmpassword) {
             return res.status(400).json({ error: "Passwords do not match" });
         }

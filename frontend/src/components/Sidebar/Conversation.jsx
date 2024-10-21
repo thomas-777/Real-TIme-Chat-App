@@ -1,11 +1,12 @@
-export default function Conversation(){
-    return(
-        <>
-            <div>
-                 <div >
-                     <p>Thomas</p>   
-                 </div>
-            </div>
-        </>
-    )
+
+import React from "react";
+
+export default function Conversation({key,name,onClick}) {
+    return (
+        <div>
+            <button>
+                <p>name</p>  
+            </button>
+        </div>
+    );
 }

@@ -1,21 +1,37 @@
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import useLogin from "../../hooks/useLogin";
 export default function Login(){
+    const [inputs,setInput] = useState({
+        username:"",
+        password:""
+    })
+    const {login}=useLogin();
+    const handleSubmit = async(e) => {
+        e.preventDefault()
+        await login(inputs)
+    }
     return(
             <div >
             <h1> Login </h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    <input type="text" placeholder="Enter username"></input>
+                    <input type="text" placeholder="Enter username"
+                        onChange={(e) => setInput({...inputs, username: e.target.value})}
+                    ></input>
                 </div>
                 <div>
-                    <input type='password' placeholder="Enter password"></input>
+                    <input type='password' placeholder="Enter password"
+                        onChange={(e)=>setInput({...inputs,password:e.target.value})}
+                    ></input>
                 </div>
                 <div>
                     <button>Login</button>
                 </div>
                 <div>
-                    <a href="#" >
+                    <Link to='/signup'>
                         {"Signup"}
-                    </a>
+                    </Link>
                 </div>
                 
             </form>

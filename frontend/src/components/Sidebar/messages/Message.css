@@ -1,0 +1,34 @@
+
+
+
+/* Individual message bubbles */
+.chat-message {
+    max-width: 60%; /* Set max width for each message bubble */
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word; /* Wrap long words */
+}
+
+/* Styling for sent messages */
+.sent {
+    background-color: #a73415;
+    margin-left: auto; /* Align sent messages to the right */
+    align-self: flex-start;
+    text-align: right;
+    border-top-right-radius: 0px;
+}
+
+/* Styling for received messages */
+.received {
+    background-color: #318925; /* Light grey for received messages */
+    margin-left: 10px;
+    align-self: flex-end; /* Align received messages to the left */
+    text-align: left; /* Text alignment for received messages */
+    border-top-left-radius: 0px; /* Flatten left corner */
+}
+
+
+
