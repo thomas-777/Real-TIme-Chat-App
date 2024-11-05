@@ -1,24 +1,54 @@
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import useGetMessages from "../../../hooks/useGetMessages";
-import './Message.css'; // Import a CSS file for additional styling (optional)
-
+import './Message.css';
+import { useSocketContext } from "../../../context/SocketContext";
 export default function Message() {
-    const receiverId = useParams().id; // Extract receiverId from the URL params
-    const { loading, data } = useGetMessages(receiverId); // Fetch messages for the user
+    const receiverId = useParams().id;
+    if (!receiverId) return;
+    const { loading, data: initmessages } = useGetMessages(receiverId);
+    const [messages, setMessages] = useState(initmessages || []);
+    useEffect(() => {
+        setMessages(initmessages);
+    }, [initmessages]);
+    const chatContainerRef = useRef(null);
+    const { socket } = useSocketContext();
+    console.log("Initial data", messages)
+    useEffect(() => {
+        if (!socket) return;
+        socket?.on("newMessage", (newMessage) => {
+            console.log("New message received", newMessage)
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            console.log("Messages", messages)
+
+        });
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+        return () => {
+            socket.off("newMessage");
+        };
+    }, [socket, messages]);
+
+
 
     if (loading) {
-        return <div>Loading messages...</div>; // Show a loading indicator
+        return <div>Loading messages...</div>;
     }
 
     return (
-        <div className="chat-container" style={{overflowY:'scroll',width:'450px', height: '320px', backgroundColor: 'black', borderRadius: '10px' }}>
-            {data && data.length > 0 ? (
-                data.map((msg) => (
+        <div
+            className="chat-container"
+            ref={chatContainerRef}
+            style={{ overflowY: 'scroll', width: '450px', height: '320px', backgroundColor: 'black', borderRadius: '10px' }}
+        >
+            {messages && messages.length > 0 ? (
+                messages.map((msg) => (
                     <div
                         key={msg._id}
-                        className={`chat-message ${msg.receiverId===receiverId ? 'sent' : 'received'}`}
+                        className={`chat-message ${msg.receiverId === receiverId ? 'sent' : 'received'}`}
                     >
-                        {msg.message} 
+                        {msg.message}
                     </div>
                 ))
             ) : (

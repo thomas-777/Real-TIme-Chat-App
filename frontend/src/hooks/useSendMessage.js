@@ -1,9 +1,10 @@
 import { useState } from "react";
 
+const adddata = (data) => {}
 const useSendMessage = () => {
     const [loading, setLoading] = useState(false);
     const sendMessage =async ({message,receiverId}) => {
-        setLoading(true);
+        setLoading(true);   
         try {
            
             const res = await fetch(`http://localhost:5000/api/messages/send/${receiverId}`, {

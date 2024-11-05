@@ -1,5 +1,7 @@
 import Conversation from "../models/conversation.model.js"
 import Message from "../models/message.model.js"
+import { getReceiverSocketId } from "../socket/socket.js"
+import { io } from "../socket/socket.js"
 export const sendMessage = async (req,res)=>{
     try{
         const {message}=req.body
@@ -26,9 +28,17 @@ export const sendMessage = async (req,res)=>{
         if(newMessage){
             conversation.messages.push(newMessage._id)
         }
+
+       
+
         await conversation.save()
         await newMessage.save()
-
+         //Socket
+        const recieverSocketId=getReceiverSocketId(receiverId);
+        if(recieverSocketId){
+            //io.to.emit(recieverid) to send message to a specific socket
+            io.to(recieverSocketId).emit("newMessage",newMessage);
+        }
         res.status(201).json(newMessage)
 
 
